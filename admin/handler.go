@@ -49,6 +49,11 @@ func NewHandler(opts *Options) (*Handler, error) {
 	}, nil
 }
 
+// 注册账号，如果账号已存在，则返回 ErrUsernameAlreadyExist 错误
+func (h *Handler) RegisterAdmin(username, password string) error {
+	return h.m.RegisterAdmin(username, password)
+}
+
 func (h *Handler) Auth(authorizationKey string) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		token := ctx.Request.Header.Get(authorizationKey)
