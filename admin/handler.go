@@ -88,6 +88,20 @@ func GetAuthAdmin(ctx *gin.Context) (adminID int, ok bool) {
 	}
 }
 
+func (h *Handler) GetLoginAdmin(ctx *gin.Context) {
+	adminID, ok := GetAuthAdmin(ctx)
+	if !ok {
+		h.sender.SendError(ctx, ErrUnauthorized)
+	} else {
+		admin, err := h.m.GetAdminByID(adminID)
+		if err != nil {
+			h.sender.SendError(ctx, err)
+		} else {
+			h.sender.SendData(ctx, admin)
+		}
+	}
+}
+
 func (h *Handler) Login() gin.HandlerFunc {
 	type params struct {
 		Username string
@@ -155,7 +169,7 @@ func (h *Handler) ResetPassword() gin.HandlerFunc {
 	}
 }
 
-func (h *Handler) LogoutAdmin(ctx *gin.Context) {
+func (h *Handler) Logout(ctx *gin.Context) {
 	admin, ok := GetAuthAdmin(ctx)
 	if !ok {
 		h.sender.SendMsgSuccess(ctx, "已退出")

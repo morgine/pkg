@@ -16,7 +16,7 @@ type model struct {
 }
 
 func (m *model) RegisterAdmin(username, password string) (err error) {
-	admin, err := m.GetAdmin(username)
+	admin, err := m.GetAdminByUsername(username)
 	if err != nil {
 		return err
 	}
@@ -32,7 +32,7 @@ func (m *model) RegisterAdmin(username, password string) (err error) {
 }
 
 func (m *model) LoginAdmin(username, password string) (*Admin, error) {
-	admin, err := m.GetAdmin(username)
+	admin, err := m.GetAdminByUsername(username)
 	if err != nil {
 		return nil, err
 	}
@@ -52,9 +52,22 @@ func (m *model) LoginAdmin(username, password string) (*Admin, error) {
 	}
 }
 
-func (m *model) GetAdmin(username string) (*Admin, error) {
+func (m *model) GetAdminByUsername(username string) (*Admin, error) {
 	admin := &Admin{}
 	err := m.db.First(admin, "username=?", username).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return nil, err
+	}
+	if admin.ID > 0 {
+		return admin, nil
+	} else {
+		return nil, nil
+	}
+}
+
+func (m *model) GetAdminByID(id int) (*Admin, error) {
+	admin := &Admin{}
+	err := m.db.First(admin, "id=?", id).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, err
 	}

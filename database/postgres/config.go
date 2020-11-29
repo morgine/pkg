@@ -3,6 +3,7 @@ package postgres
 import (
 	"database/sql"
 	"fmt"
+	_ "github.com/lib/pq"
 	"github.com/morgine/pkg/config"
 	"github.com/morgine/pkg/database"
 )

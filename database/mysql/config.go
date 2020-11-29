@@ -3,6 +3,7 @@ package mysql
 import (
 	"database/sql"
 	"fmt"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/morgine/pkg/config"
 	"github.com/morgine/pkg/database"
 )
