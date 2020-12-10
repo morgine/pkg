@@ -7,7 +7,7 @@ import (
 
 type Admin struct {
 	ID       int
-	Username string `gorm:"uniqueIndex"`
+	Username string `gorm:"index"`
 	Password string
 }
 
@@ -42,7 +42,7 @@ func (m *model) LoginAdmin(username, password string) (*Admin, error) {
 		err = bcrypt.CompareHashAndPassword([]byte(admin.Password), []byte(password))
 		if err != nil {
 			if err == bcrypt.ErrMismatchedHashAndPassword {
-				return nil, ErrUsernameAlreadyExist
+				return nil, ErrMismatchedUsernameOrPassword
 			} else {
 				return nil, err
 			}

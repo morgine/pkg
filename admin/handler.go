@@ -21,7 +21,7 @@ var (
 type Handler struct {
 	m           *model
 	session     session.Storage
-	authExpires int64  // 会话过期世界
+	authExpires int64  // 会话过期时间
 	aesCryptKey []byte // 16 位字符串
 	sender      MessageSender
 }
@@ -30,7 +30,7 @@ type Options struct {
 	DB      *gorm.DB
 	Session session.Storage
 
-	AuthExpires int64  // 会话过期世界
+	AuthExpires int64  // 会话过期时间
 	AesCryptKey []byte // 16 位字符串
 	Sender      MessageSender
 }
@@ -79,7 +79,7 @@ func (h *Handler) Auth(authorizationKey string) gin.HandlerFunc {
 	}
 }
 
-func GetAuthAdmin(ctx *gin.Context) (adminID int, ok bool) {
+func (h *Handler) GetAuthAdmin(ctx *gin.Context) (adminID int, ok bool) {
 	v, ok := ctx.Get("auth_admin")
 	if ok {
 		return v.(int), true
@@ -89,7 +89,7 @@ func GetAuthAdmin(ctx *gin.Context) (adminID int, ok bool) {
 }
 
 func (h *Handler) GetLoginAdmin(ctx *gin.Context) {
-	adminID, ok := GetAuthAdmin(ctx)
+	adminID, ok := h.GetAuthAdmin(ctx)
 	if !ok {
 		h.sender.SendError(ctx, ErrUnauthorized)
 	} else {
@@ -139,7 +139,7 @@ func (h *Handler) ResetPassword() gin.HandlerFunc {
 		NewPassword string
 	}
 	return func(ctx *gin.Context) {
-		adminID, ok := GetAuthAdmin(ctx)
+		adminID, ok := h.GetAuthAdmin(ctx)
 		if !ok {
 			h.sender.SendError(ctx, ErrUnauthorized)
 			return
@@ -170,7 +170,7 @@ func (h *Handler) ResetPassword() gin.HandlerFunc {
 }
 
 func (h *Handler) Logout(ctx *gin.Context) {
-	admin, ok := GetAuthAdmin(ctx)
+	admin, ok := h.GetAuthAdmin(ctx)
 	if !ok {
 		h.sender.SendMsgSuccess(ctx, "已退出")
 	} else {
