@@ -30,11 +30,12 @@ func NewHandler(opts *Options) (*Handler, error) {
 		return nil, err
 	}
 	return &Handler{
-		m: &model{opts.DB},
+		m:    &model{opts.DB},
+		opts: opts,
 	}, nil
 }
 
-// 注册账号
+// 注册账号，如果账号已存在则返回 ErrUsernameAlreadyExist 错误
 func (h *Handler) RegisterAdmin(username, password string) error {
 	return h.m.RegisterAdmin(username, password)
 }
@@ -59,6 +60,11 @@ func (h *Handler) CheckAndRefreshToken(token string) (adminID int, err error) {
 			}
 		}
 	}
+}
+
+// 获得账户信息
+func (h *Handler) GetAdmin(adminID int) (admin *Admin, err error) {
+	return h.m.GetAdminByID(adminID)
 }
 
 // Login 登陆账号
