@@ -7,15 +7,13 @@ import (
 )
 
 type Storage interface {
-	// save token
+	// 保存 token
 	SaveToken(userID, token string, expires int64) error
-
-	// check and refresh token if token is OK
+	// 检测 token，如果 token 合法则刷新过期时间
 	CheckAndRefreshToken(userID, token string, expires int64) (ok bool, err error)
-
-	// remove token
+	// 移除 token
 	RemoveToken(userID, token string) error
-
+	// 移除用户所有 token
 	RemoveUser(userID string) error
 }
 

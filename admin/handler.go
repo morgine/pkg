@@ -3,7 +3,7 @@ package admin
 import (
 	"bytes"
 	"fmt"
-	"github.com/morgine/pkg/admin/pkg/crypt"
+	"github.com/morgine/pkg/crypt/aes"
 	"github.com/morgine/pkg/session"
 	"gorm.io/gorm"
 	"strconv"
@@ -103,12 +103,12 @@ func (h *Handler) Logout(adminID int, token string) error {
 
 // token 加密
 func (h *Handler) encryptToken(adminID string) (token string, err error) {
-	return crypt.AesCBCEncrypt([]byte(fmt.Sprintf("%s:%10d", adminID, Now().UnixNano())), h.opts.AesCryptKey)
+	return aes.AesCBCEncrypt([]byte(fmt.Sprintf("%s:%10d", adminID, Now().UnixNano())), h.opts.AesCryptKey)
 }
 
 // token 解密
 func (h *Handler) decryptToken(token string) (adminID string, err error) {
-	data, err := crypt.AesCBCDecrypt(token, h.opts.AesCryptKey)
+	data, err := aes.AesCBCDecrypt(token, h.opts.AesCryptKey)
 	if err != nil {
 		return "", err
 	} else {
