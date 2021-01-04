@@ -58,7 +58,7 @@ func (cs Configs) UnmarshalSub(namespace string, schema interface{}) error {
 func (cs Configs) GetSub(namespace string) (env Configs, err error) {
 	subs := cs[namespace]
 	if subs == nil {
-		return make(Configs), nil
+		return nil, fmt.Errorf("config.GetSub:  require namespace %s", namespace)
 	}
 
 	switch tv := subs.(type) {
