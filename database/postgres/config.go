@@ -30,6 +30,7 @@ max_open_conns = 10
 # 连接池中最多空闲链接数量, 如果该值为 0, 则不保留空闲链接
 max_idle_conns = 10
 */
+
 type Config struct {
 	Host     string `toml:"host"`
 	Port     int    `toml:"port"`

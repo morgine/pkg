@@ -19,6 +19,7 @@ table_prefix = ""
 # 使用单数表名
 singular_table = false
 */
+
 type Config struct {
 	LogLevel      logger.LogLevel `toml:"log_level"`
 	TablePrefix   string          `toml:"table_prefix"`

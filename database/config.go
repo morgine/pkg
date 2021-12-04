@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-// 数据库公共配置
+// Config 数据库公共配置
 type Config struct {
 	// MaxLifetime is the maximum amount of time a connection may be reused.
 	//

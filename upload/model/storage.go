@@ -6,21 +6,21 @@ import (
 	"path/filepath"
 )
 
-// 数据存储器
+// Storage 数据存储器
 type Storage interface {
-	// 创建/上传文件
+	// CreateFile 创建/上传文件
 	CreateFile(file string, data []byte) error
-	// 删除文件，如果文件不存在则视作删除成功，禁止返回错误
+	// DeleteFile 删除文件，如果文件不存在则视作删除成功，禁止返回错误
 	DeleteFile(file string) error
-	// 获得字节文件
+	// GetFile 获得字节文件
 	GetFile(file string) (data []byte, err error)
-	// 获得文件服务地址，有可能是远程服务或本地服务
+	// GetServeUrl 获得文件服务地址，有可能是远程服务或本地服务
 	GetServeUrl(file string) (url string, err error)
-	// 设置文件服务地址提供器
+	// SetServeUrlGetter 设置文件服务地址提供器
 	SetServeUrlGetter(urlGetter func(file string) (url string, err error)) error
 }
 
-// 本地存储器
+// FileStorage 本地存储器
 type FileStorage struct {
 	Dir       string
 	UrlGetter func(file string) (url string, err error)

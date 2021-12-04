@@ -41,7 +41,7 @@ func (c UserKind) handle(db *gorm.DB) *gorm.DB {
 	return db
 }
 
-// 创建文件并初始化服务地址
+// Create 创建文件并初始化服务地址
 func (db *MultiFileDB) Create(file *MultiFile, data []byte) error {
 	err := db.db.Transaction(func(tx *gorm.DB) error {
 		err := tx.Create(file).Error
@@ -61,7 +61,7 @@ func (db *MultiFileDB) Create(file *MultiFile, data []byte) error {
 	return nil
 }
 
-// 统计数据总量
+// Count 统计数据总量
 func (db *MultiFileDB) Count(uk UserKind) (total int64, err error) {
 	err = handle(db.db.Model(&MultiFile{}), uk).Count(&total).Error
 	if err != nil {
@@ -77,7 +77,7 @@ type List struct {
 	Pagination
 }
 
-// 查询多条数据, 并获得服务地址
+// Find 查询多条数据, 并获得服务地址
 func (db *MultiFileDB) Find(l List) (files []*MultiFile, err error) {
 	err = handle(db.db, l.UserKind, l.OrderBy, l.Pagination).Find(&files).Error
 	if err != nil {
@@ -93,7 +93,7 @@ func (db *MultiFileDB) Find(l List) (files []*MultiFile, err error) {
 	}
 }
 
-// 删除多条数据并返回剩余数据量
+// Delete 删除多条数据并返回剩余数据量
 func (db *MultiFileDB) Delete(uk UserKind, ids []int) (total int64, err error) {
 	var files []*MultiFile
 	err = handle(db.db.Where("id in (?)", ids), uk).Find(&files).Error
@@ -116,17 +116,17 @@ func (db *MultiFileDB) Delete(uk UserKind, ids []int) (total int64, err error) {
 	return db.Count(uk)
 }
 
-// 获得文件服务地址
+// GetServeUrl 获得文件服务地址
 func (db *MultiFileDB) GetServeUrl(file string) (string, error) {
 	return db.storage.GetServeUrl(file)
 }
 
-// 获得文件服务地址
+// SetServeUrlGetter 获得文件服务地址
 func (db *MultiFileDB) SetServeUrlGetter(getter func(file string) (url string, err error)) error {
 	return db.storage.SetServeUrlGetter(getter)
 }
 
-// 获得文件内容
+// GetFile 获得文件内容
 func (db *MultiFileDB) GetFile(file string) (data []byte, err error) {
 	return db.storage.GetFile(file)
 }

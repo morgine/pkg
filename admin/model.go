@@ -15,7 +15,7 @@ type model struct {
 	db *gorm.DB
 }
 
-// 注册账号，如果账号已存在则返回 ErrUsernameAlreadyExist 错误
+// RegisterAdmin 注册账号，如果账号已存在则返回 ErrUsernameAlreadyExist 错误
 func (m *model) RegisterAdmin(username, password string) (err error) {
 	admin, err := m.GetAdminByUsername(username)
 	if err != nil {

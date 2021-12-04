@@ -16,6 +16,7 @@ password = ""
 # db 索引
 db = 0
 */
+
 type Config struct {
 	Addr     string `toml:"addr"`
 	Password string `toml:"password"`
